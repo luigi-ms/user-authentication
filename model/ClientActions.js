@@ -1,8 +1,9 @@
+const bcrypt = require('bcryptjs');
 const Client = require("./ClientDAO.js");
 
 class ClientActions {
   static async signIn(name, address, email, password) {
-    if(!this.areStrings([name, address, email, password])){
+    if (!this.areStrings([name, address, email, password])) {
       return Promise.reject("Not a string");
     }
 
@@ -11,7 +12,7 @@ class ClientActions {
     cli.name = name;
     cli.address = address;
     cli.email = email;
-    cli.password = password;
+    cli.password = await this.getHashed(password);
 
     try {
       const creation = await cli.insert();
@@ -22,7 +23,7 @@ class ClientActions {
   }
 
   static async getAllData(email) {
-    if(!this.areStrings([email])){
+    if (!this.areStrings([email])) {
       return Promise.reject("Not a string");
     }
 
@@ -35,7 +36,7 @@ class ClientActions {
   }
 
   static async update(data, newValue, email) {
-    if(!this.areStrings([data, newValue, email])){
+    if (!this.areStrings([data, newValue, email])) {
       return Promise.reject("Not a string");
     }
 
@@ -53,7 +54,7 @@ class ClientActions {
   }
 
   static async removeClient(email) {
-    if(!this.areStrings([email])){
+    if (!this.areStrings([email])) {
       return Promise.reject("Not a string");
     }
 
@@ -70,31 +71,42 @@ class ClientActions {
   }
 
   static async login(email, password) {
-    if(!this.areStrings([email, password])){
+    if (!this.areStrings([email, password])) {
       return Promise.reject("Not a string");
     }
 
     const cli = new Client();
 
     cli.email = email;
-    cli.password = password;
 
     try {
-      const loginResult = await cli.login(email);
-      return Promise.resolve(loginResult);
+      const credentials = await cli.selectCredentials(email);
+      const comparison = await bcrypt.compare(password, credentials.password);
+
+      if(comparison){
+        return Promise.resolve("Access allowed");
+      }else{
+        return Promise.reject("Access denied");
+      }
     } catch (err) {
       return Promise.reject(err);
     }
   }
 
-  static areStrings(values){
-    for(let value of values){
-      if(typeof value !== "string"){
+  static areStrings(values) {
+    for (let value of values) {
+      if (typeof value !== "string") {
         return false;
       }
     }
 
     return true;
+  }
+
+  static async getHashed(pass){
+    const salt = await bcrypt.genSalt(10);
+    const hashed = await bcrypt.hash(pass, salt);
+    return hashed;
   }
 }
 

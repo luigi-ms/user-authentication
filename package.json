@@ -5,6 +5,7 @@
   "author": "Luigi Moraes",
   "license": "MIT",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "express": "^4.17.2",
     "pg": "^8.7.1"
   }

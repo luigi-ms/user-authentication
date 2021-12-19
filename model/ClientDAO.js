@@ -80,7 +80,7 @@ class ClientDAO extends Client {
     }
   }
 
-  async login() {
+  async selectCredentials() {
     if (!(await this.clientExists(this.email))) {
       return new Error("Client does not exists. Try sign in.");
     }
