@@ -1,9 +1,21 @@
 const express = require("express");
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
 const Client = require("./model/ClientActions.js");
 
 const app = express();
 
+app.disable('x-powered-by');
 app.use(express.json());
+app.use(cookieParser());
+app.use(session({
+  secret: "gasol1ne",
+  saveUninitialized: true,
+  cookie: { maxAge: (1000 * 60) },
+  resave: true
+}));
+
+let globalSession;
 
 app.get("/getData/:email", (req, res) => {
   const id = req.params.email;
@@ -15,14 +27,25 @@ app.get("/getData/:email", (req, res) => {
 
 app.post("/signIn", (req, res) => {
   const { name, address, email, pass } = req.body;
+  
+  globalSession = req.session;
 
+  if(globalSession.sessionid === email){
+    let status = { status: "Hello" };
+  }else{
+    let status = { status: "Who are you?" }
+  }
+  
   Client.signIn(name, address, email, pass)
-    .then((result) => res.json(result))
+    .then((result) => res.json({ result, status }))
     .catch((error) => res.json({ error }));
 });
 
 app.post("/login", (req, res) => {
   const { email, pass } = req.body;
+  globalSession = req.session;
+
+  globalSession.sessionID = email;
 
   Client.login(email, pass)
     .then((result) => res.json(result))
