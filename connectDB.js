@@ -1,4 +1,4 @@
-const { Client } = require("pg");
+const { Client, Pool } = require("pg");
 
 const data = {
   user: "u0_a440",
@@ -8,7 +8,8 @@ const data = {
   port: 5432,
 };
 
-const cli = new Client(data);
-cli.connect();
+const pgCli = new Client(data);
+const pgPool = new Pool(data);
+pgCli.connect();
 
-module.exports = cli;
+module.exports = { pgCli, pgPool };

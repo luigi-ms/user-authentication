@@ -1,4 +1,4 @@
-const db = require("../connectDB.js");
+const { pgCli } = require("../connectDB.js");
 const Client = require("./Client.js");
 
 class ClientDAO extends Client {
@@ -8,7 +8,7 @@ class ClientDAO extends Client {
 
   async insert() {
     try {
-      const insertion = await db.query(
+      const insertion = await pgCli.query(
         "INSERT INTO Client(name, address, password, email) VALUES($1, $2, $3, $4)",
         [this.name, this.address, this.password, this.email]
       );
@@ -24,7 +24,7 @@ class ClientDAO extends Client {
 
   async selectAll() {
     try {
-      const selection = await db.query("SELECT * FROM Client WHERE email=$1", [
+      const selection = await pgCli.query("SELECT * FROM Client WHERE email=$1", [
         this.email,
       ]);
 
@@ -54,7 +54,7 @@ class ClientDAO extends Client {
     }
 
     try {
-      const updating = await db.query(query, [newValue, this.email]);
+      const updating = await pgCli.query(query, [newValue, this.email]);
       const updatedData = await this.selectAll();
 
       return updating
@@ -71,7 +71,7 @@ class ClientDAO extends Client {
     }
 
     try {
-      const deletion = await db.query("DELETE FROM Client WHERE email=$1", [
+      const deletion = await pgCli.query("DELETE FROM Client WHERE email=$1", [
         this.email,
       ]);
       return deletion.rows[0];
@@ -86,7 +86,7 @@ class ClientDAO extends Client {
     }
 
     try {
-      const credentials = await db.query(
+      const credentials = await pgCli.query(
         "SELECT email, password FROM Client WHERE email=$1",
         [this.email]
       );
@@ -98,7 +98,7 @@ class ClientDAO extends Client {
 
   async clientExists(email) {
     try {
-      const founded = await db.query(
+      const founded = await pgCli.query(
         "SELECT email FROM Client WHERE email=$1",
         [email]
       );

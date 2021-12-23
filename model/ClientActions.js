@@ -70,7 +70,7 @@ class ClientActions {
     }
   }
 
-  static async login(email, password) {
+  static async validateClient(email, password) {
     if (!this.areStrings([email, password])) {
       return Promise.reject("Not a string");
     }
@@ -89,7 +89,7 @@ class ClientActions {
         return Promise.reject("Access denied");
       }
     } catch (err) {
-      return Promise.reject(err);
+      return Promise.reject(err.message);
     }
   }
 
