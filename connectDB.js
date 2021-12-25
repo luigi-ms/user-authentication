@@ -1,10 +1,10 @@
 const { Client, Pool } = require("pg");
 
 const data = {
-  user: "u0_a440",
+  user: "user",
   host: "localhost",
   database: "user-auth",
-  password: "",
+  password: "password",
   port: 5432,
 };
 
