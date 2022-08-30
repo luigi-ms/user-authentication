@@ -9,7 +9,7 @@
     "cookie-parser": "^1.4.6",
     "express": "^4.18.1",
     "express-session": "^1.17.2",
-    "pg": "^8.7.3"
+    "pg": "^8.8.0"
   },
   "scripts": {
     "startdb": "pg_ctl -D $PREFIX/var/lib/psql start",
