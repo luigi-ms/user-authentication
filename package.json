@@ -2,8 +2,8 @@
   "name": "user-auth",
   "version": "1.0.0",
   "main": "./server.js",
-  "author": "Luigi Moraes",
-  "license": "MIT",
+  "author": "Luigi Moraes<luigimoraessantos@gmail.com>",
+  "license": "GNU AGPLv3",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
@@ -14,5 +14,9 @@
   "scripts": {
     "startdb": "pg_ctl -D $PREFIX/var/lib/psql start",
     "start": "yarn run startdb && node ./server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/luigi-ms-git/user-authentication"
   }
 }
